@@ -136,23 +136,6 @@ export const Searching = ({
             >
               Clear Selection
             </button>
-            <hr className="sidebar-divider" />
-            <p>Sort Order</p>
-            <button
-              className="button-secondary"
-              onClick={() => {
-                const next = state.filter.sortOrder === 'alphabetical'
-                  ? 'chronological_desc' as const
-                  : state.filter.sortOrder === 'chronological_desc'
-                    ? 'chronological_asc' as const
-                    : 'alphabetical' as const;
-                setState({ ...state, page: 1, filter: { ...state.filter, sortOrder: next } });
-              }}
-            >
-              {state.filter.sortOrder === 'alphabetical' && 'Sort: A-Z'}
-              {state.filter.sortOrder === 'chronological_desc' && 'Sort: Newest First'}
-              {state.filter.sortOrder === 'chronological_asc' && 'Sort: Oldest First'}
-            </button>
           </div>
         </menu>
         <div className="sidebar-stats">
@@ -162,15 +145,32 @@ export const Searching = ({
             <span className="whitelist-badge">★</span> Whitelisted: {state.whitelistedResults.length}
           </p>
         </div>
+        <button
+          className="button-secondary"
+          onClick={() => {
+            const next = state.filter.sortOrder === 'alphabetical'
+              ? 'chronological_desc' as const
+              : state.filter.sortOrder === 'chronological_desc'
+                ? 'chronological_asc' as const
+                : 'alphabetical' as const;
+            setState({ ...state, page: 1, filter: { ...state.filter, sortOrder: next } });
+          }}
+        >
+          {state.filter.sortOrder === 'alphabetical' && 'Sort: A-Z'}
+          {state.filter.sortOrder === 'chronological_desc' && 'Sort: Newest First'}
+          {state.filter.sortOrder === 'chronological_asc' && 'Sort: Oldest First'}
+        </button>
         {/* Scan controls */}
-        <div className="controls">
-          <button
-            className="button-control button-pause"
-            onClick={pauseScan}
-          >
-            {scanningPaused ? "Resume" : "Pause"}
-          </button>
-        </div>
+        {state.percentage < 100 && (
+          <div className="controls">
+            <button
+              className="button-control button-pause"
+              onClick={pauseScan}
+            >
+              {scanningPaused ? "Resume" : "Pause"}
+            </button>
+          </div>
+        )}
         <div className="sidebar-pagination">
           <p>Pages</p>
           <div className="pagination-controls">
