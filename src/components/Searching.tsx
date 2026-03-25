@@ -136,6 +136,23 @@ export const Searching = ({
             >
               Clear Selection
             </button>
+            <hr className="sidebar-divider" />
+            <p>Sort Order</p>
+            <button
+              className="button-secondary"
+              onClick={() => {
+                const next = state.filter.sortOrder === 'alphabetical'
+                  ? 'chronological_desc' as const
+                  : state.filter.sortOrder === 'chronological_desc'
+                    ? 'chronological_asc' as const
+                    : 'alphabetical' as const;
+                setState({ ...state, page: 1, filter: { ...state.filter, sortOrder: next } });
+              }}
+            >
+              {state.filter.sortOrder === 'alphabetical' && 'Sort: A-Z'}
+              {state.filter.sortOrder === 'chronological_desc' && 'Sort: Newest First'}
+              {state.filter.sortOrder === 'chronological_asc' && 'Sort: Oldest First'}
+            </button>
           </div>
         </menu>
         <div className="sidebar-stats">
@@ -254,11 +271,13 @@ export const Searching = ({
             Whitelisted
           </div>
         </nav>
-        {getCurrentPageUnfollowers(usersForDisplay, state.page).map(user => {
+        {(() => {
+          const positionMap = new Map(state.results.map((u, i) => [u.id, i + 1]));
+          return getCurrentPageUnfollowers(usersForDisplay, state.page, state.filter.sortOrder).map(user => {
           const firstLetter = user.username.substring(0, 1).toUpperCase();
           return (
             <>
-              {firstLetter !== currentLetter && onNewLetter(firstLetter)}
+              {state.filter.sortOrder === 'alphabetical' && firstLetter !== currentLetter && onNewLetter(firstLetter)}
               <label className="result-item">
                 <div className="flex grow align-center">
                   <div
@@ -315,6 +334,7 @@ export const Searching = ({
                       {user.username}
                     </a>
                     <span className="fs-medium">{user.full_name}</span>
+                    <span className="follow-position">#{positionMap.get(user.id)} / {state.results.length}</span>
                   </div>
                   {user.is_verified && <div className="verified-badge">✔</div>}
                   {user.is_private && (
@@ -332,7 +352,8 @@ export const Searching = ({
               </label>
             </>
           );
-        })}
+        });
+        })()}
       </article>
     </section>
   );

@@ -309,6 +309,11 @@ html {
                     font-weight: 500;
                     @extend .p-small;
                 }
+
+                .follow-position {
+                    font-size: 0.7em;
+                    color: #888;
+                }
             }
         }
 

@@ -56,9 +56,16 @@ export function getMaxPage(nonFollowersList: readonly UserNode[]): number {
   return pageCalc < 1 ? 1 : pageCalc;
 }
 
-export function getCurrentPageUnfollowers(nonFollowersList: readonly UserNode[], currentPage: number): readonly UserNode[] {
-  const sortedList = [...nonFollowersList].sort((a, b) => (a.username > b.username ? 1 : -1));
-  return sortedList.splice(UNFOLLOWERS_PER_PAGE * (currentPage - 1), UNFOLLOWERS_PER_PAGE);
+export function getCurrentPageUnfollowers(nonFollowersList: readonly UserNode[], currentPage: number, sortOrder: 'alphabetical' | 'chronological_desc' | 'chronological_asc' = 'alphabetical'): readonly UserNode[] {
+  let list: UserNode[];
+  if (sortOrder === 'alphabetical') {
+    list = [...nonFollowersList].sort((a, b) => (a.username > b.username ? 1 : -1));
+  } else if (sortOrder === 'chronological_asc') {
+    list = [...nonFollowersList].reverse();
+  } else {
+    list = [...nonFollowersList];
+  }
+  return list.splice(UNFOLLOWERS_PER_PAGE * (currentPage - 1), UNFOLLOWERS_PER_PAGE);
 }
 
 export function isWithoutProfilePicture(user: UserNode): boolean {

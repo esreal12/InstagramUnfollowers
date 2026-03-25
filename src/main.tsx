@@ -85,6 +85,7 @@ function App() {
         showVerified: true,
         showPrivate: true,
         showWithOutProfilePicture: true,
+        sortOrder: 'alphabetical' as const,
       },
     });
   };
@@ -184,6 +185,7 @@ function App() {
             state.filter,
           ),
           state.page,
+          state.filter.sortOrder,
         ),
       });
     } else {
