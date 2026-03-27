@@ -20,6 +20,8 @@ type UnfollowingState = {
   readonly status: 'unfollowing';
   readonly searchTerm: string;
   readonly percentage: number;
+  readonly results: readonly UserNode[];
+  readonly whitelistedResults: readonly UserNode[];
   readonly selectedResults: readonly UserNode[];
   readonly unfollowLog: readonly UnfollowLogEntry[];
   readonly filter: UnfollowFilter;

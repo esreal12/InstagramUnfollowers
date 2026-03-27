@@ -225,6 +225,8 @@ export const Searching = ({
                 ...prevState,
                 status: "unfollowing",
                 percentage: 0,
+                results: prevState.results,
+                whitelistedResults: prevState.whitelistedResults,
                 unfollowLog: [],
                 filter: {
                   showSucceeded: true,

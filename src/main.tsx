@@ -237,6 +237,10 @@ function App() {
       if (state.status !== "scanning") {
         return;
       }
+      if (state.percentage >= 100) {
+        // Returning from unfollow — results already loaded, skip re-scan.
+        return;
+      }
       const results = [...state.results];
       let scrollCycle = 0;
       let url = urlGenerator();
@@ -402,6 +406,7 @@ function App() {
       markup = <Unfollowing
         state={state}
         handleUnfollowFilter={handleUnfollowFilter}
+        setState={setState}
       ></Unfollowing>;
       break;
 

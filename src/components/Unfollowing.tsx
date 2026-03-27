@@ -5,13 +5,14 @@ import { State } from "../model/state";
 interface UnfollowingProps {
   state: State;
   handleUnfollowFilter: (e: React.ChangeEvent<HTMLInputElement>) => void;
-
+  setState: (state: State) => void;
 }
 
 export const Unfollowing = (
   {
     state,
     handleUnfollowFilter,
+    setState,
   }: UnfollowingProps) => {
 
   if (state.status !== "unfollowing") {
@@ -48,6 +49,37 @@ export const Unfollowing = (
           <>
             <hr />
             <div className="fs-large p-medium clr-green">All DONE!</div>
+            <button
+              className="button-secondary"
+              style={{ margin: '0.5rem 1rem' }}
+              onClick={() => {
+                const successfulIds = new Set(
+                  state.unfollowLog
+                    .filter(e => e.unfollowedSuccessfully)
+                    .map(e => e.user.id)
+                );
+                setState({
+                  status: 'scanning',
+                  page: 1,
+                  searchTerm: '',
+                  currentTab: 'non_whitelisted',
+                  percentage: 100,
+                  results: state.results.filter(u => !successfulIds.has(u.id)),
+                  whitelistedResults: state.whitelistedResults,
+                  selectedResults: [],
+                  filter: {
+                    showNonFollowers: true,
+                    showFollowers: false,
+                    showVerified: true,
+                    showPrivate: true,
+                    showWithOutProfilePicture: true,
+                    sortOrder: 'alphabetical',
+                  },
+                });
+              }}
+            >
+              Back to Results
+            </button>
             <hr />
           </>
         )}
